@@ -31,7 +31,7 @@ def check_weights_path(weights_path):
     
     for path in possible_paths:
         if path.is_file():
-            return str(path.resolve())  # Convert back to string for YOLO
+            return path  # Convert back to string for YOLO
     return None
 
 @st.cache_data
@@ -54,12 +54,11 @@ def load_model():
                 3. The full path is accessible
                 
                 Checked paths:
-                - {weights_path}
-                - {os.path.join(os.getcwd(), weights_path)}
-                - {os.path.join(os.getcwd(), 'weights', 'yolov5l.pt')}
+                - {weights_path},  # Original path
+                - {pathlib.Path.cwd() / weights_path},  # Full path from current directory
+                - {pathlib.Path.cwd() / 'weights' / 'yolov5l.pt'},  # Explicit weights directory
+                - {pathlib.Path('/mount/src/cattle_graze_model/weights/yolov5l.pt')}
                 
-                All files in current directory:
-                - {os.listdir('.')} 
             """)
             return None
             
@@ -74,8 +73,6 @@ def load_model():
             
             Current working directory: {os.getcwd()}
             Python path: {os.environ.get('PYTHONPATH', 'Not set')}
-            All files in current directory:
-                - {os.listdir('.')} 
         """)
         return None
 
