@@ -14,11 +14,6 @@ import platform
 # temp = pathlib.PosixPath
 # pathlib.PosixPath = pathlib.WindowsPath
 
-if platform.system() == 'Windows':
-    pathlib.PosixPath = pathlib.WindowsPath
-else:
-    pathlib.WindowsPath = pathlib.PosixPath
-
 
 
 @st.cache_data
@@ -27,6 +22,11 @@ def load_model():
     Load the YOLO model with improved error handling
     """
     try:
+        if platform.system() == 'Windows':
+            pathlib.PosixPath = pathlib.WindowsPath
+        else:
+            pathlib.WindowsPath = pathlib.PosixPath
+
         valid_path = pathlib.Path("yolov5s.pt")                                         # "/" + os.path.join("mount", "src", "cattle_graze_model", "yolov5s.pt")
         if not os.path.isfile(valid_path):
             st.error(f""" 
