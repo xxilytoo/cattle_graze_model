@@ -16,7 +16,7 @@ import torch
 # Load the YOLO model using the ultralytics package
 @st.cache_data
 def load_model():
-    weights_path = 'yolov5l.pt'
+    weights_path = 'weights/yolov5l.pt'
     model = YOLO(weights_path) if torch.load(weights_path) else None
     return model
 
