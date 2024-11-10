@@ -7,32 +7,19 @@ from sort import Sort  # Ensure this library is installed for object tracking
 import pathlib
 import os
 import torch
+import platform
 
 """ONLY UNCOMMENT FOR WINDOWS LOCAL RUN"""
 # Ensure compatibility with Windows paths
 # temp = pathlib.PosixPath
 # pathlib.PosixPath = pathlib.WindowsPath
 
-def check_weights_path(weights_path):
-    """
-    Check if the weights file exists and is accessible using platform-agnostic path handling
-    Returns the full path if found, None otherwise
-    """
-    # Convert string path to Path object
-    weights_path = pathlib.Path(weights_path)
-    
-    # List of possible paths to check using Path objects
-    possible_paths = [
-        weights_path,  # Original path
-        pathlib.Path.cwd() / weights_path,  # Full path from current directory
-        pathlib.Path.cwd() / 'weights' / 'yolov5l.pt',  # Explicit weights directory
-        pathlib.Path('/mount/src/cattle_graze_model/weights/yolov5l.pt'),  # Absolute path
-    ]
-    
-    for path in possible_paths:
-        if path.is_file():
-            return path  # Convert back to string for YOLO
-    return None
+if platform.system() == 'Windows':
+    pathlib.PosixPath = pathlib.WindowsPath
+else:
+    pathlib.WindowsPath = pathlib.PosixPath
+
+
 
 @st.cache_data
 def load_model():
@@ -42,7 +29,7 @@ def load_model():
     try:
         # Default weights path
         weights_path = 'yolov5l.pt'
-        valid_path = "/" + os.path.join("mount", "src", "cattle_graze_model", "yolov5s.pt")
+        valid_path = pathlib.Path("yolov5ls.pt")                                         # "/" + os.path.join("mount", "src", "cattle_graze_model", "yolov5s.pt")
         if not os.path.isfile(valid_path):
             st.error(f""" 
                      Valid Path Failed
@@ -50,24 +37,6 @@ def load_model():
                      Current Directory: {os.getcwd()}
                      All files in directory: {os.listdir(os.getcwd())}
                      """)
-        # # Check if weights file exists
-        # valid_path = check_weights_path(weights_path)
-        
-        # if valid_path is None:
-        #     st.error(f"""
-        #         Could not find weights file. Please ensure:
-        #         1. The weights file 'yolov5l.pt' exists in the 'weights' directory
-        #         2. The file has correct permissions
-        #         3. The full path is accessible
-                
-        #         Checked paths:
-        #         - {weights_path},  # Original path
-        #         - {pathlib.Path.cwd() / weights_path},  # Full path from current directory
-        #         - {pathlib.Path.cwd() / 'weights' / 'yolov5l.pt'},  # Explicit weights directory
-        #         - {pathlib.Path('/mount/src/cattle_graze_model/weights/yolov5l.pt')}
-                
-        #     """)
-        #     return None
             
         # Load the model
         model = YOLO(valid_path)
