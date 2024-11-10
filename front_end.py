@@ -14,8 +14,6 @@ import platform
 # temp = pathlib.PosixPath
 # pathlib.PosixPath = pathlib.WindowsPath
 
-
-
 @st.cache_data
 def load_model():
     """
@@ -52,18 +50,20 @@ if model is None:
         2. You have sufficient permissions
         3. There is enough memory available
     """)
-# Function to process and track objects in video
+
+# Function to process and track objects in video with stop capability
 def process_video(input_path, output_path):
     cap = cv2.VideoCapture(input_path)
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     out = None
     tracker = Sort()
     cattle_cnt = 0
-    
+    stop_processing = False
+
     while cap.isOpened():
         cattle_cnt_temp = 0
         ret, frame = cap.read()
-        if not ret:
+        if not ret or stop_processing:
             break
 
         # Run YOLO detection on the frame
@@ -93,9 +93,15 @@ def process_video(input_path, output_path):
         if out is None:
             out = cv2.VideoWriter(output_path, fourcc, cap.get(cv2.CAP_PROP_FPS), (frame.shape[1], frame.shape[0]))
         out.write(frame)
+        
+        # Check if stop button was pressed
+        if st.button("Stop Processing Video"):
+            stop_processing = True
+            st.warning("Video processing has been stopped by the user.")
 
     cap.release()
-    out.release()
+    if out:
+        out.release()
     return cattle_cnt
 
 # Function to process and track objects in images
@@ -165,5 +171,6 @@ if uploaded_file is not None:
 
     else:
         st.error("Please upload a valid image or video file.")
+
 
 
