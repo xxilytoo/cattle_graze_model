@@ -70,7 +70,6 @@ def load_model():
         
     except Exception as e:
         st.error(f"""
-            Path Tried: {valid_path}
             Error loading model: {str(e)}
             
             Current working directory: {os.getcwd()}
