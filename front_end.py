@@ -27,15 +27,7 @@ def load_model():
         else:
             pathlib.WindowsPath = pathlib.PosixPath
 
-        valid_path = pathlib.Path("yolov5l.pt")                                         # "/" + os.path.join("mount", "src", "cattle_graze_model", "yolov5s.pt")
-        if not os.path.isfile(valid_path):
-            st.error(f""" 
-                     Valid Path Failed
-                     Valid_path = {valid_path}
-                     Current Directory: {os.getcwd()}
-                     All files in directory: {os.listdir(os.getcwd())}
-                     """)
-            
+        valid_path = pathlib.Path("yolov5l.pt")                                        
         # Load the model
         model = YOLO(valid_path)
         st.success("Model loaded successfully!")
