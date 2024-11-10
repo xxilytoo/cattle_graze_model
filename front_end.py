@@ -31,7 +31,7 @@ def load_model():
         if not os.path.isfile(valid_path):
             st.error(f""" 
                      Valid Path Failed
-                     Vaid_path = {valid_path}
+                     Valid_path = {valid_path}
                      Current Directory: {os.getcwd()}
                      All files in directory: {os.listdir(os.getcwd())}
                      """)
