@@ -1,6 +1,5 @@
-streamlit==1.40.0
-opencv-python==4.8.0.74
+opencv-python==4.10.0.84
 numpy==1.24.3
-torch==2.0.1
+torch==2.5.1
 pathlib
 os
