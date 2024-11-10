@@ -13,16 +13,73 @@ import torch
 # temp = pathlib.PosixPath
 # pathlib.PosixPath = pathlib.WindowsPath
 
-# Load the YOLO model using the ultralytics package
+def check_weights_path(weights_path):
+    """
+    Check if the weights file exists and is accessible
+    Returns the full path if found, None otherwise
+    """
+    # List of possible paths to check
+    possible_paths = [
+        weights_path,  # Original path
+        os.path.join(os.getcwd(), weights_path),  # Full path from current directory
+        os.path.join(os.getcwd(), 'weights', 'yolov5l.pt'),  # Explicit weights directory
+        '/mount/src/cattle_graze_model/weights/yolov5l.pt',  # Absolute path
+    ]
+    
+    for path in possible_paths:
+        if os.path.isfile(path):
+            return path
+    return None
+
 @st.cache_data
 def load_model():
-    weights_path = 'weights/yolov5l.pt'
-    model = YOLO(weights_path) if torch.load(weights_path) else None
-    return model
+    """
+    Load the YOLO model with improved error handling
+    """
+    try:
+        # Default weights path
+        weights_path = 'weights/yolov5l.pt'
+        
+        # Check if weights file exists
+        valid_path = check_weights_path(weights_path)
+        
+        if valid_path is None:
+            st.error(f"""
+                Could not find weights file. Please ensure:
+                1. The weights file 'yolov5l.pt' exists in the 'weights' directory
+                2. The file has correct permissions
+                3. The full path is accessible
+                
+                Checked paths:
+                - {weights_path}
+                - {os.path.join(os.getcwd(), weights_path)}
+                - {os.path.join(os.getcwd(), 'weights', 'yolov5l.pt')}
+            """)
+            return None
+            
+        # Load the model
+        model = YOLO(valid_path)
+        st.success("Model loaded successfully!")
+        return model
+        
+    except Exception as e:
+        st.error(f"""
+            Error loading model: {str(e)}
+            
+            Current working directory: {os.getcwd()}
+            Python path: {os.environ.get('PYTHONPATH', 'Not set')}
+        """)
+        return None
 
+# Update the model loading call
 model = load_model()
-if model == None:
-    st.header("MODEL FAIL LOAD")
+if model is None:
+    st.error("""
+        Failed to load the model. Please check:
+        1. The model weights file is present
+        2. You have sufficient permissions
+        3. There is enough memory available
+    """)
 # Function to process and track objects in video
 def process_video(input_path, output_path):
     cap = cv2.VideoCapture(input_path)
