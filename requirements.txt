@@ -5,3 +5,9 @@ matplotlib
 scikit-image
 filterpy
 ultralytics
+Pillow
+PyYAML
+torchvision
+
+pandas
+seaborn
