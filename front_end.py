@@ -43,7 +43,7 @@ def load_model():
         # Default weights path
         weights_path = 'yolov5l.pt'
         valid_path = 'weights/yolov5l.pt'
-        if not valid_path.is_file():
+        if not os.path.isfile(valid_path):
             st.error(f""" Valid Path Failed
                      Current Directory: {os.getcwd()}
                      All files in directory: {os.listdir(os.getcwd())}
