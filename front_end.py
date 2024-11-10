@@ -38,7 +38,7 @@ def load_model():
     """
     try:
         # Default weights path
-        weights_path = 'weights/yolov5l.pt'
+        weights_path = 'yolov5l.pt'
         
         # Check if weights file exists
         valid_path = check_weights_path(weights_path)
