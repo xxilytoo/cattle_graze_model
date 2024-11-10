@@ -27,9 +27,7 @@ def load_model():
     Load the YOLO model with improved error handling
     """
     try:
-        # Default weights path
-        weights_path = 'yolov5l.pt'
-        valid_path = pathlib.Path("yolov5ls.pt")                                         # "/" + os.path.join("mount", "src", "cattle_graze_model", "yolov5s.pt")
+        valid_path = pathlib.Path("yolov5s.pt")                                         # "/" + os.path.join("mount", "src", "cattle_graze_model", "yolov5s.pt")
         if not os.path.isfile(valid_path):
             st.error(f""" 
                      Valid Path Failed
