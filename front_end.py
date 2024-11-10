@@ -7,9 +7,10 @@ from sort import Sort  # Ensure this library is installed for object tracking
 import pathlib
 import os
 
+"""ONLY UNCOMMENT FOR WINDOWS LOCAL RUN"""
 # Ensure compatibility with Windows paths
-temp = pathlib.PosixPath
-pathlib.PosixPath = pathlib.WindowsPath
+# temp = pathlib.PosixPath
+# pathlib.PosixPath = pathlib.WindowsPath
 
 # Load the YOLO model using the ultralytics package
 @st.cache_data
