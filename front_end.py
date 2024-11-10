@@ -19,7 +19,7 @@ def check_weights_path(weights_path):
     Returns the full path if found, None otherwise
     """
     # Convert string path to Path object
-    weights_path = Path(weights_path)
+    weights_path = pathlib.Path(weights_path)
     
     # List of possible paths to check using Path objects
     possible_paths = [
