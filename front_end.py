@@ -15,20 +15,23 @@ import torch
 
 def check_weights_path(weights_path):
     """
-    Check if the weights file exists and is accessible
+    Check if the weights file exists and is accessible using platform-agnostic path handling
     Returns the full path if found, None otherwise
     """
-    # List of possible paths to check
+    # Convert string path to Path object
+    weights_path = Path(weights_path)
+    
+    # List of possible paths to check using Path objects
     possible_paths = [
         weights_path,  # Original path
-        os.path.join(os.getcwd(), weights_path),  # Full path from current directory
-        os.path.join(os.getcwd(), 'weights', 'yolov5l.pt'),  # Explicit weights directory
-        '/mount/src/cattle_graze_model/weights/yolov5l.pt',  # Absolute path
+        pathlib.Path.cwd() / weights_path,  # Full path from current directory
+        pathlib.Path.cwd() / 'weights' / 'yolov5l.pt',  # Explicit weights directory
+        pathlib.Path('/mount/src/cattle_graze_model/weights/yolov5l.pt'),  # Absolute path
     ]
     
     for path in possible_paths:
-        if os.path.isfile(path):
-            return path
+        if path.is_file():
+            return str(path.resolve())  # Convert back to string for YOLO
     return None
 
 @st.cache_data
