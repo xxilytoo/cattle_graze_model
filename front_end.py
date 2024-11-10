@@ -74,6 +74,8 @@ def load_model():
             
             Current working directory: {os.getcwd()}
             Python path: {os.environ.get('PYTHONPATH', 'Not set')}
+            All files in current directory:
+                - {os.listdir('.')} 
         """)
         return None
 
