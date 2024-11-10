@@ -42,7 +42,7 @@ def load_model():
     try:
         # Default weights path
         weights_path = 'yolov5l.pt'
-        valid_path = os.getcwd() + '/yolov5s.pt'
+        valid_path = os.path.join("mount", "src", "cattle_graze_model", "yolov5s.pt")
         if not os.path.isfile(valid_path):
             st.error(f""" Valid Path Failed
                      Vaid_path = {valid_path}
