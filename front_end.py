@@ -54,6 +54,9 @@ def load_model():
                 - {weights_path}
                 - {os.path.join(os.getcwd(), weights_path)}
                 - {os.path.join(os.getcwd(), 'weights', 'yolov5l.pt')}
+                
+                All files in current directory:
+                - {os.listdir('.')} 
             """)
             return None
             
