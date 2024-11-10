@@ -6,6 +6,7 @@ from ultralytics import YOLO
 from sort import Sort  # Ensure this library is installed for object tracking
 import pathlib
 import os
+import torch
 
 """ONLY UNCOMMENT FOR WINDOWS LOCAL RUN"""
 # Ensure compatibility with Windows paths
@@ -15,11 +16,13 @@ import os
 # Load the YOLO model using the ultralytics package
 @st.cache_data
 def load_model():
-    model = YOLO('yolov5l.pt')  # Replace with your model weights (e.g., 'best.pt')
+    weights_path = 'yolov5l.pt'
+    model = YOLO(weights_path) if torch.load(weights_path) else None
     return model
 
 model = load_model()
-
+if model == None:
+    st.header("MODEL FAIL LOAD")
 # Function to process and track objects in video
 def process_video(input_path, output_path):
     cap = cv2.VideoCapture(input_path)
