@@ -27,7 +27,7 @@ def load_model():
         else:
             pathlib.WindowsPath = pathlib.PosixPath
 
-        valid_path = pathlib.Path("yolov5s.pt")                                         # "/" + os.path.join("mount", "src", "cattle_graze_model", "yolov5s.pt")
+        valid_path = pathlib.Path("yolov5l.pt")                                         # "/" + os.path.join("mount", "src", "cattle_graze_model", "yolov5s.pt")
         if not os.path.isfile(valid_path):
             st.error(f""" 
                      Valid Path Failed
