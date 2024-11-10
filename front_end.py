@@ -42,25 +42,30 @@ def load_model():
     try:
         # Default weights path
         weights_path = 'yolov5l.pt'
+        valid_path = 'weights/yolov5l.pt'
+        if not valid_path.isfile():
+            st.error(f""" Valid Path Failed
+                     Current Directory: {os.getcwd()}
+                     All files in directory: {os.listdir(os.getcwd())}
+                     """)
+        # # Check if weights file exists
+        # valid_path = check_weights_path(weights_path)
         
-        # Check if weights file exists
-        valid_path = check_weights_path(weights_path)
-        
-        if valid_path is None:
-            st.error(f"""
-                Could not find weights file. Please ensure:
-                1. The weights file 'yolov5l.pt' exists in the 'weights' directory
-                2. The file has correct permissions
-                3. The full path is accessible
+        # if valid_path is None:
+        #     st.error(f"""
+        #         Could not find weights file. Please ensure:
+        #         1. The weights file 'yolov5l.pt' exists in the 'weights' directory
+        #         2. The file has correct permissions
+        #         3. The full path is accessible
                 
-                Checked paths:
-                - {weights_path},  # Original path
-                - {pathlib.Path.cwd() / weights_path},  # Full path from current directory
-                - {pathlib.Path.cwd() / 'weights' / 'yolov5l.pt'},  # Explicit weights directory
-                - {pathlib.Path('/mount/src/cattle_graze_model/weights/yolov5l.pt')}
+        #         Checked paths:
+        #         - {weights_path},  # Original path
+        #         - {pathlib.Path.cwd() / weights_path},  # Full path from current directory
+        #         - {pathlib.Path.cwd() / 'weights' / 'yolov5l.pt'},  # Explicit weights directory
+        #         - {pathlib.Path('/mount/src/cattle_graze_model/weights/yolov5l.pt')}
                 
-            """)
-            return None
+        #     """)
+        #     return None
             
         # Load the model
         model = YOLO(valid_path)
