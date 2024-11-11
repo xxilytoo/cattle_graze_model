@@ -28,6 +28,7 @@ def load_model():
             Error loading model: {str(e)}
             
             Current working directory: {os.getcwd()}
+            Files in working directory: {os.listdir(os.getcwd())}
             Python path: {os.environ.get('PYTHONPATH', 'Not set')}
         """)
         return None
