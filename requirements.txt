@@ -11,3 +11,5 @@ torchvision
 
 pandas
 seaborn
+
+streamlit-navigation-bar
