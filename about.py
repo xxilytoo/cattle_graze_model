@@ -25,7 +25,7 @@ To train the YOLOv11 model effectively, a diverse and well-labeled dataset was c
 st.write("""
 Pre-processing steps involved:
 - **Resizing** images to match the model’s input size.
-- **Augmentation techniques**: Including random rotations, flips, and color adjustments to improve the model's generalization capabilities.
+
 """)
 
 # Training Methodology Section
