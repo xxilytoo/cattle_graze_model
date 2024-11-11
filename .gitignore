@@ -96,11 +96,6 @@ celerybeat-schedule
 *.swp
 *~
 
-# Large model and data files
-*.pt
-*.h5
-*.hdf5
-*.pkl
 
 # Streamlit config
 .streamlit/
