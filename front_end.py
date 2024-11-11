@@ -3,16 +3,11 @@ import tempfile
 import cv2
 import numpy as np
 from ultralytics import YOLO
-from sort import Sort  # Ensure this library is installed for object tracking
+from sort import Sort  
 import pathlib
 import os
 import torch
 import platform
-
-"""ONLY UNCOMMENT FOR WINDOWS LOCAL RUN"""
-# Ensure compatibility with Windows paths
-# temp = pathlib.PosixPath
-# pathlib.PosixPath = pathlib.WindowsPath
 
 @st.cache_data
 def load_model():
@@ -25,9 +20,9 @@ def load_model():
         else:
             pathlib.WindowsPath = pathlib.PosixPath
 
-        valid_path = pathlib.Path("yolov5l.pt")                                        
+        valid_path = pathlib.Path("final.pt")                                        
         # Load the model
-        model = YOLO(valid_path)
+        model = YOLO("yolo11ft.pt")
         st.success("Model loaded successfully!")
         return model
         
@@ -60,7 +55,15 @@ def process_video(input_path, output_path):
     cattle_cnt = 0
     stop_processing = False
 
+    # Display stop button outside the loop
+    stop_button_pressed = st.button("Stop Processing Video", key="stop_button")
+
     while cap.isOpened():
+        if stop_button_pressed:
+            stop_processing = True
+            st.warning("Video processing has been stopped by the user.")
+            break
+
         cattle_cnt_temp = 0
         ret, frame = cap.read()
         if not ret or stop_processing:
@@ -73,7 +76,7 @@ def process_video(input_path, output_path):
         for result in results:
             for box in result.boxes.data.cpu().numpy():
                 x1, y1, x2, y2, conf, cls = box
-                if conf > 0.3:  # Confidence threshold
+                if conf > 0.5:  # Confidence threshold
                     tracker_input.append([x1, y1, x2, y2, conf])
                     cattle_cnt_temp += 1
 
@@ -93,11 +96,6 @@ def process_video(input_path, output_path):
         if out is None:
             out = cv2.VideoWriter(output_path, fourcc, cap.get(cv2.CAP_PROP_FPS), (frame.shape[1], frame.shape[0]))
         out.write(frame)
-        
-        # Check if stop button was pressed
-        if st.button("Stop Processing Video"):
-            stop_processing = True
-            st.warning("Video processing has been stopped by the user.")
 
     cap.release()
     if out:
@@ -113,9 +111,9 @@ def process_image(image):
     for result in results:
         for box in result.boxes.data.cpu().numpy():
             x1, y1, x2, y2, conf, cls = box
-            if conf > 0.3:  # Confidence threshold
+            if conf > 0.4:  # Confidence threshold
                 cv2.rectangle(image, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 2)
-                cv2.putText(image, f'Class: {int(cls)} Conf: {conf:.2f}', (int(x1), int(y1) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                
                 cattle_cnt += 1
     return image, cattle_cnt
 
@@ -171,6 +169,7 @@ if uploaded_file is not None:
 
     else:
         st.error("Please upload a valid image or video file.")
+
 
 
 

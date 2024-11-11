@@ -107,3 +107,4 @@ celerybeat-schedule
 
 #large weights
 yolov5lu.pt
+yolov5
