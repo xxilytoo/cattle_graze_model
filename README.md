@@ -16,7 +16,7 @@ This project is a Streamlit-based web application designed to detect cattle in a
 ## Training Details
 - **Model Architecture**: YOLOv11, a state-of-the-art object detection model, was selected for its speed and accuracy.
 - **Training Data**: High-resolution aerial images and videos, annotated with cattle locations.
-- **Pre-Processing**: Included image resizing, augmentation (rotations, flips, color adjustments) to improve model robustness.
+- **Pre-Processing**: Image resizing to ensure that all input images are standardized to model's required input size.
 - **Training Process**: Fine-tuning was performed using transfer learning, with hyperparameter tuning for optimal performance.
 - **Evaluation Metrics**:
   - Precision and Recall
