@@ -6,7 +6,6 @@ from ultralytics import YOLO
 from sort import Sort  
 import pathlib
 import os
-import torch
 import platform
 
 @st.cache_data
@@ -19,16 +18,13 @@ def load_model():
             pathlib.PosixPath = pathlib.WindowsPath
         else:
             pathlib.WindowsPath = pathlib.PosixPath
-
-        valid_path = pathlib.Path("final.pt")                                        
+                                      
         # Load the model
         model = YOLO("yolo11ft.pt")
-        st.success("Model loaded successfully!")
         return model
         
     except Exception as e:
         st.error(f"""
-            valid_path = {str(valid_path)}
             Error loading model: {str(e)}
             
             Current working directory: {os.getcwd()}
@@ -45,7 +41,6 @@ if model is None:
         2. You have sufficient permissions
         3. There is enough memory available
     """)
-
 # Function to process and track objects in video with stop capability
 def process_video(input_path, output_path):
     cap = cv2.VideoCapture(input_path)
@@ -76,7 +71,7 @@ def process_video(input_path, output_path):
         for result in results:
             for box in result.boxes.data.cpu().numpy():
                 x1, y1, x2, y2, conf, cls = box
-                if conf > 0.5:  # Confidence threshold
+                if conf > 0.5 and cls == 0:  # Confidence threshold
                     tracker_input.append([x1, y1, x2, y2, conf])
                     cattle_cnt_temp += 1
 
@@ -111,15 +106,15 @@ def process_image(image):
     for result in results:
         for box in result.boxes.data.cpu().numpy():
             x1, y1, x2, y2, conf, cls = box
-            if conf > 0.4:  # Confidence threshold
+            if conf > 0.4 and cls == 0:  # Confidence threshold
                 cv2.rectangle(image, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 2)
-                
+                cv2.putText(image, f'Class: {int(cls)} Conf: {conf:.2f}', (int(x1), int(y1) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
                 cattle_cnt += 1
     return image, cattle_cnt
 
 # Streamlit UI
 st.title("Cattle Grazing Detector")
-option = st.selectbox("Upload an image (jpg, jpeg, png) or video (mp4, avi, mov) for detection", ["Image", "Video"])
+option = st.selectbox("Choose whether to process image (jpg, jpeg, png) or video (mp4, avi, mov) for detection", ["Image", "Video"])
 
 uploaded_file = st.file_uploader("Upload a file", type=["jpg", "jpeg", "png", "mp4", "avi", "mov"])
 
