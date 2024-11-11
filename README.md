@@ -3,6 +3,8 @@
 ## Overview
 This project is a Streamlit-based web application designed to detect cattle in aerial images and videos using a fine-tuned YOLOv11 model. The tool is built to assist farmers, researchers, and livestock managers in monitoring grazing patterns, assessing herd distribution, and ensuring the well-being of cattle.
 
+Link to Deployed application: https://cattledetectionpro.streamlit.app/
+
 ## Features
 - **Cattle Detection in Images and Videos**: Upload images or videos, and the application will identify and highlight cattle in the footage.
 - **Real-Time Processing**: Optimized for real-time detection to support practical field applications.
