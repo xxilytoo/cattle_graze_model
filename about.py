@@ -2,7 +2,7 @@ import streamlit as st
 
 # Page Title
 st.title("About the Project: Training the YOLOv11 Model for Cattle Detection")
-
+st.write("Github repo: https://github.com/xxilytoo/cattle_graze_model/tree/main")
 # Objective Section
 st.header("Objective")
 st.write("""
